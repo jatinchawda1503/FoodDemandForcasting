@@ -1,4 +1,5 @@
 from turtle import color, width
+from unicodedata import category
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -6,6 +7,7 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import seaborn as sns
 
 st.title("Welcome to FDA")
 
@@ -71,4 +73,65 @@ def box_relation(df):
     return fig
 
 st.plotly_chart(box_relation(data), use_container_width=True)
+
+
+def week_order_line(df):
+    dfg = df.groupby(["week"])["num_orders"].sum()
+    fig = px.line(x=dfg.index, y=dfg)
+    fig.update_layout(title='Pattern of Orders',
+                   xaxis_title='Week',
+                   yaxis_title='Number of Order per Week')
+    return fig
+st.plotly_chart(week_order_line(data), use_container_width=True)
+
+def checkout_orders_hist(df):
+    fig = px.histogram(df, x="checkout_price", y="num_orders", marginal="rug",
+                    hover_data=df.columns)
+    return fig
+st.plotly_chart(checkout_orders_hist(data), use_container_width=True)
+
+
+
+option = data['category'].unique().tolist()
+
+options = st.multiselect(
+     'What are your favorite colors',
+     option,
+     option
+
+)
+
+
+dfg = data.groupby(["category"])["num_orders"].sum()
+dfs = {category: data[data["category"] == category] for category in options}
+
+st.write('You selected:', options)
+
+fig = go.Figure()
+for category, dfg in dfs.items():
+    fig = fig.add_trace(go.Scatter(x=dfg.index, y=dfg, name=category))
+        
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+# fig = px.line(x=data["week"], y=data["num_orders"], color=data['center_type'])
+# st.plotly_chart(fig, use_container_width=True)
+
+
+
+##Dist Plot 
+
+# hist_data = [data['base_price'],data['checkout_price']]
+# group_labels = ['base_price','checkout_price']
+# fig2 = ff.create_distplot(hist_data, group_labels,bin_size=[1, 1])
+# st.plotly_chart(fig2, use_container_width=True)
+
+
+# fig = plt.figure(figsize=(10, 4))
+# sns.lineplot(x="week", y="num_orders", data=data, hue="category")
+# st.pyplot(fig)
 
