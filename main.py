@@ -1,8 +1,5 @@
-from turtle import color, width
-from unicodedata import category
 import pandas as pd
 import streamlit as st
-import matplotlib.pyplot as plt
 import plotly.figure_factory as ff
 import plotly.express as px
 import plotly.graph_objects as go
