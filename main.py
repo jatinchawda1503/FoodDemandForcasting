@@ -9,17 +9,8 @@ from plotly.subplots import make_subplots
 st.set_page_config(layout="wide")
 st.title("Welcome to FDA")
 
-@st.cache(allow_output_mutation=True)
-def read_data():
-    train = pd.read_csv('data/train-short.csv')
-    fulfilment_center_info = pd.read_csv('data/fulfilment_center_info.csv')
-    meal = pd.read_csv('data/meal_info.csv')
-    data_train_center_merge = pd.merge(train, fulfilment_center_info, on='center_id')
-    data_merged = pd.merge(data_train_center_merge, meal, on='meal_id')
-    return data_merged
 
-
-data = read_data()
+data = pd.read_csv('data/data.csv')
 
 
 st.subheader('Weekly Demand Data')
@@ -29,7 +20,7 @@ def home_page():
 
     
 
-    @st.cache
+    
     def box_relation(df):
         cols = df[['week','checkout_price','base_price','num_orders']]
 
@@ -54,7 +45,7 @@ def home_page():
 
     st.plotly_chart(box_relation, use_container_width=True)
 
-    @st.cache
+    
     def type_box(df):
         fig = px.box(df, x='center_type', y='num_orders')
         fig.update_layout(height=700,title_text="Relationship of center type and number of orders")
@@ -72,7 +63,7 @@ def home_page():
 
 def page2():
 
-    @st.cache
+    
     def checkout_base_scatter(df):
         fig = px.scatter(data, x="checkout_price", y="base_price",color="category")
         fig.update_layout(title='Checkout Price Vs Base Price',
@@ -83,7 +74,7 @@ def page2():
     st.plotly_chart(checkout_base_scatter, use_container_width=True)
     
     # HIST ORDERS
-    @st.cache
+    
     def checkout_orders_hist(df):
         fig = px.histogram(df, x="checkout_price", y="num_orders", marginal="rug",
                         hover_data=df.columns)
@@ -94,7 +85,7 @@ def page2():
     checkout_orders_hist = checkout_orders_hist(data)
 
     # Dist Plot 
-    @st.cache
+    
     def base_checkout(df):
         hist_data = [df['base_price'],df['checkout_price']]
         group_labels = ['base_price','checkout_price']
@@ -109,7 +100,7 @@ def page2():
     st.plotly_chart(base_checkout, use_container_width=True)
 
 def page3():
-    @st.cache
+    
     def cuisine_order_pie(df):
         fig = px.pie(df,'cuisine','num_orders',title='Percentage of Orders irresprctive of cuisine')
         fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -117,7 +108,7 @@ def page3():
 
     cuisine_order_pie = cuisine_order_pie(data)
 
-    @st.cache
+    
     def order_center_pie(df):
         fig = px.pie(df,'center_type','num_orders',title='Percentage of Orders irresprctive of Center')
         fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -135,7 +126,7 @@ def page3():
 
 def page4():
     
-    @st.cache
+    
     def cat_order_bar(df):
         dfg = df.groupby(["category"])["num_orders"].sum().sort_values(ascending=False)
         fig = px.bar(x=dfg.index, y=dfg, color=dfg.index,title="Orders by Category in Millions",text_auto='.2s')
@@ -145,7 +136,7 @@ def page4():
         return fig
     cat_order_bar = cat_order_bar(data) 
 
-    @st.cache
+    
     def week_order_line(df):
         dfg = df.groupby(["week"])["num_orders"].sum()
         fig = px.line(x=dfg.index, y=dfg)
@@ -187,7 +178,7 @@ def page5():
 
     order_with_cat_weekly_line = order_with_cat_weekly_line(data)
             
-    @st.cache
+    
     def cat_center_hist(df):
         fig = px.histogram(df, x="category", y="num_orders",
                     color='center_type', barmode='group')
