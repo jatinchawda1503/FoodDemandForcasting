@@ -20,60 +20,14 @@ def read_data():
 
 
 data = read_data()
-# st.write(data.head())
-
-
-
-
-#Base price and checkout price are pretty much similar for each command by cuisine, nevertheless there are some instances where base price exceeds the checkout price. The most noticable one is within the Continental cuisine.
-
-# def single_base_price(df):
-#     return df["base_price"] / df["num_orders"]
-
-
-# def single_checkout_price(df):
-#     return df["checkout_price"] / df["num_orders"]
-
-
-# data["single_base_price"] = data.apply(lambda x: single_base_price(x), axis=1)
-# data["single_checkout_price"] = data.apply(lambda x: single_checkout_price(x), axis=1)
-
-
-
-# def base_with_cat_weekly_line(df):
-    
-#     option = df['category'].unique().tolist()
-
-#     option_cat = st.multiselect(
-#         'Select Category',
-#         option,
-#         option
-#     )
-
-#     dfs = {cat: df[df["category"] == cat] for cat in option_cat}
-
-#     fig = go.Figure()
-#     for cat, orders in dfs.items():
-#         dfg = orders.groupby(["week"])["single_base_price"].sum()
-#         fig = fig.add_trace(go.Scatter(x=dfg.index, y=dfg, name=cat))
-#         fig.update_layout(title='Weekly Number of Orders based on category',
-#                    xaxis_title='Week',
-#                    yaxis_title='Number of Orders')
-
-#     return fig
-        
-# st.plotly_chart(base_with_cat_weekly_line(data), use_container_width=True)
-
-
-
-
-# PLOTS 
 
 
 st.subheader('Weekly Demand Data')
 
 
 def home_page():
+
+    
 
     @st.cache
     def box_relation(df):
@@ -98,6 +52,36 @@ def home_page():
         return fig
     box_relation = box_relation(data)
 
+    st.plotly_chart(box_relation, use_container_width=True)
+
+    @st.cache
+    def type_box(df):
+        fig = px.box(df, x='center_type', y='num_orders')
+        fig.update_layout(height=700,title_text="Relationship of center type and number of orders")
+        return fig
+    type_box = type_box(data)
+    st.plotly_chart(type_box, use_container_width=True)
+
+    
+
+    
+    
+
+
+    
+
+def page2():
+
+    @st.cache
+    def checkout_base_scatter(df):
+        fig = px.scatter(data, x="checkout_price", y="base_price",color="category")
+        fig.update_layout(title='Checkout Price Vs Base Price',
+                    xaxis_title='Checkout Price',
+                    yaxis_title='Base Price')
+        return fig
+    checkout_base_scatter = checkout_base_scatter(data)
+    st.plotly_chart(checkout_base_scatter, use_container_width=True)
+    
     # HIST ORDERS
     @st.cache
     def checkout_orders_hist(df):
@@ -121,15 +105,10 @@ def home_page():
 
     base_checkout = base_checkout(data)
 
-    
-    st.plotly_chart(box_relation, use_container_width=True)
-
-
     st.plotly_chart(checkout_orders_hist, use_container_width=True)
     st.plotly_chart(base_checkout, use_container_width=True)
 
-
-def page2():
+def page3():
     @st.cache
     def cuisine_order_pie(df):
         fig = px.pie(df,'cuisine','num_orders',title='Percentage of Orders irresprctive of cuisine')
@@ -154,7 +133,7 @@ def page2():
         st.plotly_chart(cuisine_order_pie, use_container_width=True)
 
 
-def page3():
+def page4():
     
     @st.cache
     def cat_order_bar(df):
@@ -181,7 +160,7 @@ def page3():
 
     st.plotly_chart(cat_order_bar, use_container_width=True)
 
-def page4():
+def page5():
     
     option = data['category'].unique().tolist()
 
@@ -224,7 +203,8 @@ page_names_to_funcs = {
     "Main Page": home_page,
     "Page 2": page2,
     "Page 3": page3,
-    "Page 4": page4
+    "Page 4": page4,
+    "Page 5": page5
 }
 
 
