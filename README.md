@@ -6,7 +6,7 @@
   - conda create -y python=3.9 --name data-viz
   - conda activate data-viz
   - pip install -r requirements.txt
-  - conda activate monks
+  - conda activate data-viz
   - Create a folder data in the root directory
 
 ## To Run Streamlit
