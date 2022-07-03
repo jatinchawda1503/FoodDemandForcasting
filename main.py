@@ -205,6 +205,7 @@ def home_page():
     with col2:
         st.plotly_chart(checkout_orders_hist, use_container_width=True)
         st.plotly_chart(base_checkout, use_container_width=True)
+        
 @st.cache(hash_funcs={dict: lambda _: None},suppress_st_warning=True)
 def page1():
     col1, col2 = st.columns(2)
@@ -214,7 +215,7 @@ def page1():
 
     with col2:
         st.plotly_chart(cuisine_order_pie, use_container_width=True)
-        
+
 @st.cache(hash_funcs={dict: lambda _: None},suppress_st_warning=True)
 def page3():
     st.plotly_chart(week_order_line, use_container_width=True)
