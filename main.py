@@ -7,28 +7,28 @@ from plotly.subplots import make_subplots
 
 
 st.set_page_config(layout="wide")
-st.title("Welcome to FDA")
+st.title("FOOD DEMAND FORECASTING")
 
 @st.cache(allow_output_mutation=True)
 def read_data():
-    train = pd.read_csv('data/train-short.csv')
-    fulfilment_center_info = pd.read_csv('data/fulfilment_center_info.csv')
-    meal = pd.read_csv('data/meal_info.csv')
-    data_train_center_merge = pd.merge(train, fulfilment_center_info, on='center_id')
-    data_merged = pd.merge(data_train_center_merge, meal, on='meal_id')
-    return data_merged
+    train = pd.read_csv('data/data.csv')
+    # fulfilment_center_info = pd.read_csv('data/fulfilment_center_info.csv')
+    # meal = pd.read_csv('data/meal_info.csv')
+    # data_train_center_merge = pd.merge(train, fulfilment_center_info, on='center_id')
+    # data_merged = pd.merge(data_train_center_merge, meal, on='meal_id')
+    return train
 
 
 data = read_data()
 
 
-st.subheader('Weekly Demand Data')
+
 
 
 def home_page():
 
     
-
+   
     @st.cache
     def box_relation(df):
         cols = df[['week','checkout_price','base_price','num_orders']]
@@ -111,7 +111,7 @@ def page2():
 def page3():
     @st.cache
     def cuisine_order_pie(df):
-        fig = px.pie(df,'cuisine','num_orders',title='Percentage of Orders irresprctive of cuisine')
+        fig = px.pie(df,'cuisine','num_orders',title='Percentage of Orders irrespective of cuisine')
         fig.update_traces(textposition='inside', textinfo='percent+label')
         return fig
 
@@ -119,7 +119,7 @@ def page3():
 
     @st.cache
     def order_center_pie(df):
-        fig = px.pie(df,'center_type','num_orders',title='Percentage of Orders irresprctive of Center')
+        fig = px.pie(df,'center_type','num_orders',title='Percentage of Orders irrespective of Center')
         fig.update_traces(textposition='inside', textinfo='percent+label')
         return fig
 
